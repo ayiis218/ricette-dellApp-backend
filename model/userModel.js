@@ -27,6 +27,18 @@ const getUserById = (id) => {
   })
 }
 
+const getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    conn.query(`SELECT * FROM users WHERE email = $1`, [email], 
+    (err, res) => {
+      if (err) {
+        reject(new Error(`SQL : ${err.message}`));
+      }
+      resolve(res);
+    })
+  })
+}
+
 const getCreateUser = (data) => {
   return new Promise((resolve, reject) => {
     const { id, name, email, password, photo, phone } = data
@@ -105,6 +117,7 @@ const getDeleteUser = (id) => {
 module.exports = {
   getAllUser,
   getUserById,
+  getUserByEmail,
   getCreateUser,
   getUpdateUser,
   getDeleteUser

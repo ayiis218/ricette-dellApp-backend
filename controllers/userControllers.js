@@ -8,7 +8,8 @@ const allUser = async (req, res) => {
     const getdata = await userModel.getAllUser(id)
     res.send({ data: getdata.rows, jumlahData: getdata.rowCount })
   } catch (error) {
-    res.status(400).send('Error Code')
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -22,20 +23,27 @@ const UserId = async (req, res) => {
       res.status(404).send('Data not found')
     }
   } catch (error) {
-    res.status(400).send('Error Code')
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
 const createUser = async (req, res) => {
   try {
     const photo = req?.file?.path
-
     const { id, name, email, password, phone } = req.body
-    const getData = await userModel.getCreateUser({ id, name, email, password, photo, phone })
-    res.status(200).send(`Success create recipe user id ${id}`)
+
+    const data = await userModel.getUserByEmail({email})
+
+    if (email !== data.rows.email || data.rowCount > 0) {
+      res.status(409).send(`duplicate email`)
+    } else {
+      const getData = await userModel.getCreateUser({ id, name, email, password, photo, phone })
+      res.status(200).send(`Success create recipe user id ${id}`)
+    }
   } catch (error) {
     console.log(error)
-    res.status(400).send('Error Code')
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -46,9 +54,9 @@ const updateUser = async (req, res) => {
     const {id, name, email, password, phone} = req.body
     const getdata = await userModel.getUpdateUser({id, name, email, password, photo, phone})
     res.status(200).send(`Success update recipe id ${id}`)
-  } catch (err) {
-    console.log(err)
-    res.status(400).send('Error Code')
+  } catch (error) {
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -62,7 +70,8 @@ const deleteUser = async (req, res) => {
       res.status(404).send('Not found')
     }
   } catch (error) {
-    res.status(400).send('Error Code')
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 

@@ -22,7 +22,7 @@ const recipeId = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(400).send('Error Code')
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -36,7 +36,8 @@ const recipeName = async (req, res) => {
       res.status(404).send('Data not found')
     }
   } catch (error) {
-    res.status(400).send('Error code')   
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)  
   }
 }
 const latestRecipe = async (req, res) => {
@@ -78,7 +79,7 @@ const createRecipe = async (req, res) => {
       }
   } catch (error) {
     console.log(error)
-    res.status(404).send('Error Code')
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -91,7 +92,7 @@ const updateRecipe = async (req, res) => {
     res.status(200).send(`Success update recipe id ${id}`)
   } catch (error) {
     console.log(error)
-    res.status(400).send('Error Code')
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
@@ -105,7 +106,8 @@ const deletRecipe = async (req, res) => {
       res.status(404).send('Not found')
     }
   } catch (error) {
-    res.status(400).send('Error Code')
+    console.log(error)
+    res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 
