@@ -2,40 +2,44 @@ const multer = require('multer')
 const path = require('path')
 
 const file = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'picture');
-    },
-    filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname)
-      const filename = `${Date.now()}${ext}`
-      cb(null, filename)
-    },
+  destination: (req, file, cb) => {
+    cb(null, 'picture/user');
+    
+  },
+
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime() + '-' + file.originalname)
+  },
+
 })
 
 const upload = multer({
   file,
   limits: { fileSize: 2 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
+  fileFilter: (req, file, cb) => {
       const ext = path.extname(file.originalname).toLowerCase()
       let type = ext === '.jpg' || ext === '.png' || ext === '.webp'
-        if (type) {
-          return cb(null, true);
+        if (!type) {
+          cb(null, false)
+          return cb(new Error('file must be type jpg or png'))
         }
-        cb(null, false)
-        return cb(new Error('file must be type failed'))
-    },
-  }).single('photo')
+    return cb(null, true)
+  },
+}).single('images')
 
-    const uploadFile = (req, res, next) => {
-      upload(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
-          res.status(401).send('failed', 'image to large, max size is 2MB!');
-        }
+const uploadfile = (req, res, next) => {
+  upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        res.status(401).send('failed', 'image to large, max size is 2MB!');
+      }
         if (err) {
-          res.status(401).send('failed', err.message)
+          res.status(401).send('failed', err.message);
         }
-        res.status(404).send('Error code')
-    })
+      return next()
+  })
 }
 
-module.exports = uploadFile;
+module.exports = uploadfile
+
+
+// const uploadfile = multer({ storage: file })

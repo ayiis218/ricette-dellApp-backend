@@ -4,9 +4,9 @@ const multer = require('multer')
 const path = require('path')
 
 const controller = require('../controllers/userControllers')
-// const fileupload = require('../images/userImage')
+const userImages = require('../middlewares/userImages')
 
-const file = multer.diskStorage({
+/* const file = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, 'picture');
 		
@@ -31,12 +31,12 @@ const upload = multer({
   }).single('photo')
   
 
-const uploadfile = multer({ storage: file })
+const uploadfile = multer({ storage: file }) */
 
 Router.get('/', controller.allUser)
 Router.get('/users/id', controller.UserId)
-Router.post('/users/add', uploadfile.single('photo'), controller.createUser)
-Router.put('/users/update/id', uploadfile.single('photo'), controller.updateUser)
+Router.post('/users/add', userImages, controller.createUser)
+Router.put('/users/update/id', userImages, controller.updateUser)
 /* // Router.put('/users/update/id', controller.updatePhoto)
 // Router.put('/users/update/id', controller.updatepass) */
 Router.delete('/user/delete/id', controller.deleteUser)

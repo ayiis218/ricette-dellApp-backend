@@ -4,8 +4,7 @@ const userModel = require('../model/userModel')
 
 const allUser = async (req, res) => {
   try {
-    const { id } = req.body
-    const getdata = await userModel.getAllUser(id)
+    const getdata = await userModel.getAllUser()
     res.send({ data: getdata.rows, jumlahData: getdata.rowCount })
   } catch (error) {
     console.log(error)
@@ -32,10 +31,11 @@ const createUser = async (req, res) => {
   try {
     const photo = req?.file?.path
     const { id, name, email, password, phone } = req.body
-
-    const data = await userModel.getUserByEmail({email})
-
-    if (email !== data.rows.email || data.rowCount > 0) {
+    const data = await userModel.getUserById(id)
+    const dataEmail = await userModel.getUserByEmail(email)
+    if ( data.rowCount > 0 ){
+      res.status(409).send(`duplicate user`)
+    } else if ( dataEmail.rowCount > 0) {
       res.status(409).send(`duplicate email`)
     } else {
       const getData = await userModel.getCreateUser({ id, name, email, password, photo, phone })
