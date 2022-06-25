@@ -9,9 +9,6 @@ This app was built with some technologies below:
 - [Node.js](https://nodejs.org/en/)
 - [Express.js](https://expressjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
-- and other
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -42,9 +39,5 @@ My Email : ayiis.218@gmail.com
 
 Project Link: https://github.com/ayiis218/ricette-dellApp
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ## License
 Distributed under the [MIT](/LICENSE) License.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
