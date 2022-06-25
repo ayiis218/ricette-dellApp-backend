@@ -1,4 +1,4 @@
-# ricette-dellApp
+# Ricette-dellApp Application
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -10,34 +10,27 @@ This app was built with some technologies below:
 - [Express.js](https://expressjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
 
-<!-- GETTING STARTED -->
-## Getting Started
-
 ### Requirements
 * [Node.js](https://nodejs.org/en/)
 * [Postman](https://www.getpostman.com/)
 * [Database](./blanja.sql)
 
 ### Installation
-
-- Clone the Repo
+- Clone my repositories
 ```
 git clone https://github.com/ayiis218/ricette-dellApp.git
-```
-- Go To Folder Repo
-```
-cd ricette-dellApp
+
 ```
 - Install Module
+
 ```
 npm install
 ```
 
 ## Contact
 
-My Email : ayiis.218@gmail.com
-
-Project Link: https://github.com/ayiis218/ricette-dellApp
+email : ayiis.218@gmail.com
+github Link: https://github.com/ayiis218
 
 ## License
 Distributed under the [MIT](/LICENSE) License.
