@@ -57,12 +57,12 @@ const pagination = async (req, res) => {
 		const getData = await recipeModel.getCount({limit, page})
 
     if (getData) {
-      res.status(200).send({ total_data: data.rowCount, result: getData.rows, page: page, limit })
+      return res.status(200).send({ total_data: data.rowCount, data: getData.rows, page: page, limit })
     }
-     res.status(404).send('Data not found')
+     return res.status(404).send('Data not found')
   } catch (error) {
     console.log(error)
-    res.status(400).send(`Bad Request : ${error.message}`)
+    return res.status(400).send(`Bad Request : ${error.message}`)
   }
 }
 

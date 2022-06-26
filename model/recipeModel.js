@@ -19,7 +19,7 @@ const getCount = (data) => {
 	return new Promise((resolve, reject) => {
     const { limit, page } = data
 		conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
-    FROM recipe INNER JOIN users ON users.id_users = recipe.id_users LIMIT $1 OFFSET $2`, [limit, page],
+    FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC LIMIT $1 OFFSET (($2 -1) * $1)`, [limit, page],
 			(err, res) => {
 				if (err) {
 					reject(new Error(`SQL : ${err.message}`))

@@ -50,10 +50,17 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const photo = req?.file?.path
-
-    const {id, name, email, password, phone} = req.body
-    const getdata = await userModel.getUpdateUser({id, name, email, password, photo, phone})
-    res.status(200).send(`Success update recipe id ${id}`)
+    const { id, name, email, password, phone } = req.body
+    const data = await userModel.getUserById(id)
+    const dataEmail = await userModel.getUserByEmail(email)
+    if ( data.rowCount > 0 ){
+      res.status(409).send(`duplicate user`)
+    } else if ( dataEmail.rowCount > 0) {
+      res.status(409).send(`duplicate email`)
+    } else {
+      const getdata = await userModel.getUpdateUser({id, name, email, password, photo, phone})
+      res.status(200).send(`Success update recipe id ${id}`)
+    }
   } catch (error) {
     console.log(error)
     res.status(400).send(`Bad Request : ${error.message}`)
