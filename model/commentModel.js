@@ -32,6 +32,21 @@ const getCommentById = (id) => {
   })
 }
 
+const getCommentByRecipe = (id) => {
+  return new Promise((resolve,reject) => {
+    conn.query(`SELECT comment.id_comment, recipe.name_recipe, comment.text, users.name FROM comment 
+    INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
+    INNER JOIN users ON comment.id_users = users.id_users id_recipe = $1`, [id],
+    (err, res) => {
+      if (err) {
+        reject(new Error(`SQL : ${err.message}`))
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 const getCreateComment = (data) => {
   return new Promise((resolve, reject) => {
     const  { id_comment, id_user, id_recipe, text } = data
@@ -78,4 +93,11 @@ const getDeleteComment = (id) => {
   })
 }
 
-module.exports = { getAllComment, getCommentById, getCreateComment, getUpdateComment, getDeleteComment }
+module.exports = { 
+  getAllComment, 
+  getCommentById,
+  getCommentByRecipe,
+  getCreateComment,
+  getUpdateComment, 
+  getDeleteComment 
+}

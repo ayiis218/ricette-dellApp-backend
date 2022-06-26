@@ -11,7 +11,7 @@ const allComment = async (req, res) => {
   }
 }
 
-const getCommentId = async (req, res) => {
+const commentId = async (req, res) => {
   try {
     const { id } = req.body
     const getdata = await commentModel.getCommentById(id)
@@ -21,9 +21,9 @@ const getCommentId = async (req, res) => {
   }
 }
 
-/* const getComment = async (req, res) => {
+/* const commentByRecipe = async (req, res) => {
     try {
-        const { id } = req.params
+        const { name } = req.body
         const result = await recipeModel.recipeById
     } catch (error) {
         return failed(res, 400, 'failed', `Bad Request : ${error.message} `)
@@ -72,4 +72,10 @@ const deleteComment = async (req, res) => {
   }
 }
 
-module.exports = { allComment, getCommentId, createComment, updateComment, deleteComment }
+module.exports = { 
+  allComment,
+  commentId,
+  createComment,
+  updateComment,
+  deleteComment 
+}
