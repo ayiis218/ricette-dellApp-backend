@@ -2,8 +2,9 @@ const conn = require('../config/database')
 
 const getAllComment = () => {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT comment.id_comment, recipe.name_recipe, comment.text FROM comment 
-    INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe ORDER BY id_comment ASC`,
+    conn.query(`SELECT comment.id_comment, recipe.name_recipe, comment.text, users.name FROM comment 
+    INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe
+    INNER JOIN users ON comment.id_users = users.id_users ORDER BY id_comment ASC`,
       (err, res) => {
         if (err) {
           reject(new Error(`SQL : ${err.message}`))
@@ -17,8 +18,9 @@ const getAllComment = () => {
 
 const getCommentById = (id) => {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT comment.id_comment, recipe.name_recipe, comment.text FROM comment 
-    INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe WHERE id_comment = $1`, [id],
+    conn.query(`SELECT comment.id_comment, recipe.name_recipe, comment.text, users.name FROM comment 
+    INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
+    INNER JOIN users ON comment.id_users = users.id_users WHERE id_comment = $1`, [id],
       (err, res) => {
         if (err) {
           reject(new Error(`SQL : ${err.message}`))

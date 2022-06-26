@@ -45,7 +45,6 @@ const updateComment = async (req, res) => {
   try {
     const { comment, id_user, id_recipe } = req.body
     const getData = await commentModel.getUpdateComment(comment, id_user, id_recipe)
-    console.log(getData)
 
     res.send({ data: getData.rows, jumlahData: getData.rowCount })
 

@@ -1,4 +1,3 @@
-// const { v4: uuidv4 } = require('uuid')
 const recipeModel = require('../model/recipeModel')
 
 const allRecipe = async (req, res) => {
@@ -69,13 +68,13 @@ const pagination = async (req, res) => {
 const createRecipe = async (req, res) => {
   try {
     const images = req?.file?.path
-
     const { id, name, ingredients, video, id_user } = req.body
-    const getData = await recipeModel.getCreateRecipe({id,name,ingredients,images,video,id_user})
-      if (getData < 0) {
-        res.status(200).send(`Success create recipe user id ${id}`)
+    const data = await recipeModel.getRecipeById(id)
+      if ( data.rowCount > 0 ){
+        res.status(409).send(`duplicate user`)
       } else {
-       res.status(400).send('duplikat')
+        const getData = await recipeModel.getCreateRecipe({id, name, ingredients, images, video, id_user})
+        res.status(200).send(`Success create recipe user id ${id}`)
       }
   } catch (error) {
     console.log(error)

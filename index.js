@@ -3,6 +3,7 @@ const cors = require('cors')
 const xss = require('xss-clean')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
 
 // const Router = require ('./routes/routes')
 const userRoute = require('./routes/userRoute')
