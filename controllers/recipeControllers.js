@@ -1,4 +1,5 @@
 const recipeModel = require('../model/recipeModel')
+const deleteFile= require('../middlewares/deleteImages')
 
 const allRecipe = async (req, res) => {
   try {
@@ -42,7 +43,7 @@ const recipeName = async (req, res) => {
 const latestRecipe = async (req, res) => {
       const { limit } = req.query
 
-      const getData = await recipeModel.getLatestRecipe({limit})
+      const getData = await recipeModel.getLatestRecipe(limit)
       res.send({ data: getData.rows, jumlahData: getData.rowCount })
 }
 
@@ -69,11 +70,12 @@ const createRecipe = async (req, res) => {
   try {
     const images = req?.file?.path
     const { id, name, ingredients, video, id_user } = req.body
+    const create = new Date(Date.now())
     const data = await recipeModel.getRecipeById(id)
       if ( data.rowCount > 0 ){
         res.status(409).send(`duplicate user`)
       } else {
-        const getData = await recipeModel.getCreateRecipe({id, name, ingredients, images, video, id_user})
+        const getData = await recipeModel.getCreateRecipe({id, name, ingredients, images, video, id_user, create})
         res.status(200).send(`Success create recipe user id ${id}`)
       }
   } catch (error) {
@@ -98,12 +100,17 @@ const updateRecipe = async (req, res) => {
 const deletRecipe = async (req, res) => {
   try {
     const { id } = req.body
-    const getData = await recipeModel.getDeleteRecipe(id)
-    if (getData.rowCount > 0) {
-      res.status(200).send(`Success delete user id ${id}`)
-    } else {
-      res.status(404).send('Not found')
-    }
+    /* const data = await recipeModel.getRecipeById(id)
+    const file = data.rows[0].images
+      if (file) {
+        deleteFile(`picture/recipe/${file}`)
+      } */
+      const getData = await recipeModel.getDeleteRecipe(id)
+        if (getData.rowCount > 0) {
+          res.status(200).send(`Success delete user id ${id}`)
+        } else {
+          res.status(404).send('Not found')
+        }
   } catch (error) {
     console.log(error)
     res.status(400).send(`Bad Request : ${error.message}`)

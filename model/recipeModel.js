@@ -2,7 +2,7 @@ const conn = require('../config/database')
 
 const getAllRecipe = () => {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create
+    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
     FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC`,
       (err, res) => {
         if (err) {
@@ -18,7 +18,7 @@ const getAllRecipe = () => {
 const getCount = (data) => {
 	return new Promise((resolve, reject) => {
     const { limit, page } = data
-		conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name
+		conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
     FROM recipe INNER JOIN users ON users.id_users = recipe.id_users LIMIT $1 OFFSET $2`, [limit, page],
 			(err, res) => {
 				if (err) {
@@ -33,7 +33,7 @@ const getCount = (data) => {
 
 const getRecipeById = (id) => {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create
+    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
     FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE id_recipe = $1`, [id],
       (err, res) => {
         if (err) {
@@ -47,7 +47,7 @@ const getRecipeById = (id) => {
 
 const getRecipeByName = (name) => {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create
+    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
     FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE name_recipe = $1`, [name],
       (err, res) => {
         if (err) {
@@ -59,10 +59,24 @@ const getRecipeByName = (name) => {
   })
 }
 
+/* const getRecipeByUser = (name) => {
+  return new Promise((resolve, reject) => {
+    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create
+    FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE users.name = $1`, [name],
+      (err, res) => {
+        if (err) {
+          reject(new Error(`SQL : ${err.message}`))
+        }
+        resolve(res)
+      }
+    )
+  })
+} */
+
 const getLatestRecipe = (data) => {
   return new Promise((resolve, reject) => {
     const { limit } = data
-    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create
+    conn.query(`SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
     FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY recipe.create DESC LIMIT $1`,
     [limit],
       (err, res) => {
@@ -76,9 +90,9 @@ const getLatestRecipe = (data) => {
 
 const getCreateRecipe = (data) => {
   return new Promise((resolve, reject) => {
-    const { id, name, ingredients, images, video, id_user } = data
-    conn.query('INSERT INTO recipe ( id_recipe, name_recipe, ingredients, images, video, id_users) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [id, name, ingredients, images, video, id_user],
+    const { id, name, ingredients, images, video, id_user, create } = data
+    conn.query('INSERT INTO recipe ( id_recipe, name_recipe, ingredients, images, video, id_users, create_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [id, name, ingredients, images, video, id_user, create],
       (err, res) => {
         if (err) {
           reject(new Error(`SQL : ${err.message}`))
@@ -121,6 +135,7 @@ module.exports = {
   getCount,
   getRecipeById,
   getRecipeByName,
+  // getRecipeByUser,
   getLatestRecipe,
   getCreateRecipe,
   getUpdateRecipe,
