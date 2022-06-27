@@ -1,4 +1,6 @@
-# Ricette-dellApp Application
+<p align="center">
+  <a height="100px">Ricette-dellApp Application</a>
+</p>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
