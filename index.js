@@ -11,11 +11,12 @@ const userRoute = require('./routes/userRoute')
 const recipeRoute = require('./routes/recipeRoute')
 const commentRoute = require('./routes/commentRoute')
 
-const port = process.env.PORT || 8100
+const port = process.env.APP_PORT || 8100
 const app = express()
 
 const option = {
-  origin: 'http://localhost:8080'
+  origin: 'http://localhost:8080',
+  optionSuccessStatus: 200
 }
 app.use(cors(option))
 
