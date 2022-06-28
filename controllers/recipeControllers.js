@@ -73,7 +73,7 @@ const createRecipe = async (req, res) => {
     const create = new Date(Date.now())
     const data = await recipeModel.getRecipeById(id)
       if ( data.rowCount > 0 ){
-        res.status(409).send(`duplicate user`)
+        res.status(409).send(`duplicate recipe`)
       } else {
         const getData = await recipeModel.getCreateRecipe({id, name, ingredients, images, video, id_user, create})
         res.status(200).send(`Success create recipe user id ${id}`)
@@ -85,12 +85,17 @@ const createRecipe = async (req, res) => {
 }
 
 const updateRecipe = async (req, res) => {
-  try {
-    const images = req?.file?.path
-
-    const { id, name, ingredients, videos, id_user } = req.body
-    const getdata = await recipeModel.getUpdateRecipe({id, name, ingredients, images, videos, id_user})
-    res.status(200).send(`Success update recipe id ${id}`)
+    try {
+      const images = req?.file?.path
+      const { id, name, ingredients, videos, id_user } = req.body
+      const create = new Date(Date.now())
+      const data = await recipeModel.getRecipeById(id)
+        if ( data.rowCount > 0 ){
+          res.status(409).send(`duplicate recipe`)
+        } else {
+          const getdata = await recipeModel.getUpdateRecipe({id, name, ingredients, images, videos, id_user, create})
+          return res.status(200).send(`Success update recipe id ${id}`)
+        }
   } catch (error) {
     console.log(error)
     res.status(400).send(`Bad Request : ${error.message}`)

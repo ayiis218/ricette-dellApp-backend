@@ -106,9 +106,9 @@ const getCreateRecipe = (data) => {
 
 const getUpdateRecipe = (data, id) => {
   return new Promise((resolve, reject) => {
-    const {id,name, ingredients, images, videos, id_user } = data
-    conn.query('UPDATE recipe SET id_recipe=$1, name_recipe=$2, ingredients=$3, images=$4, video=$5, id_users =$6 WHERE id_recipe = $7',
-    [id, name, ingredients, images, videos, id_user, id],
+    const {id, name, ingredients, images, videos, id_user, create } = data
+    conn.query('UPDATE recipe SET id_recipe=$1, name_recipe=$2, ingredients=$3, images=$4, video=$5, id_users =$6, create_at= $7 WHERE id_recipe = $8',
+    [id, name, ingredients, images, videos, id_user, create, id],
       (err, res) => {
         if (err) {
           reject(new Error(`SQL : ${err.message}`))
