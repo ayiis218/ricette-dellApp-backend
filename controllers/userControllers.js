@@ -51,12 +51,16 @@ const updateUser = async (req, res) => {
   try {
     const photo = req?.file?.path
     const { id, name, email, password, phone } = req.body
+
+    const salt = await bcrypt.genSalt()
+    const hash = await bcrypt.hash(password, salt)
+
     const dataEmail = await userModel.getUserByEmail(email)
     if ( dataEmail.rowCount > 0) {
       res.status(409).send(`duplicate email`)
     } else {
-      const getdata = await userModel.getUpdateUser({id, name, email, password, photo, phone})
-      res.status(200).send(`Success update recipe id ${id}`)
+      const getdata = await userModel.getUpdateUser({id, name, email, password: hash, photo, phone})
+      res.status(200).send(`Success update user id ${id}`)
     }
   } catch (error) {
     console.log(error)
