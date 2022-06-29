@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const generateToken = require('../middlewares/generateToken')
-const randomToken = require('/middlewares/randomToken')
+/* const generateToken = require('../middlewares/generateToken')
+const randomToken = require('/middlewares/randomToken') */
 const userModel = require('../model/userModel')
 
 
@@ -10,8 +10,8 @@ const register = async (req, res) => {
         const photo = req?.file?.path
         const { id, name, email, password, phone } = req.body
 
-        const salt = bcrypt.genSaltSync(15)
-        const hash = bcrypt.hashSync(password, salt)
+        const salt = await bcrypt.genSalt()
+        const hash = await bcrypt.hash(password, salt)
 
         const data = await userModel.getUserById(id)
         const dataEmail = await userModel.getUserByEmail(email)
@@ -20,7 +20,7 @@ const register = async (req, res) => {
             } else if ( dataEmail.rowCount > 0) {
                 return res.status(409).send(`duplicate email`)
             } else {
-                const getData = await userModel.getCreateUser({ id, name, email, passwordn: hash, photo, phone })
+                const getData = await userModel.getCreateUser({ id, name, email, password: hash, photo, phone })
                 return res.status(200).send(`Success create user id ${id}`)
             }
     } catch (error) {
@@ -32,25 +32,31 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
-        const checkEmail = await userModel.getUserByEmail(email)
-            if(!checkEmail.rowCount > 0) {
-                return res.status(400).send(`Email or password wrong`)
-            }
-            const result = checkEmail.rows[0]
-            const checkPass = bcrypt.compareSync(password, result.password)
-            if (checkPass) {
-                const token = jwt.sign(
-                    getUserByEmail?.rows[0],
-                    "5e4abe48640c5751e0acf50c032dda3582aa09fe69e9e891e926d1a93798e8a2",
-                    { expiresIn: '24h' }
-                )
-                res.status(200).send(token)
+        const dataEmail = await userModel.getUserByEmail(email)
+            if (dataEmail.rowCount > 0) {
+            const checkPass = bcrypt.compare(password, dataEmail.rows[0].password)
+                if (checkPass) {
+                    const token = jwt.sign(
+                        dataEmail?.rows[0],
+                        process.env.JWT_SECRET,
+                        { expiresIn: '24h' }
+                    )
+                    /* const refreshToken = jwt.sign(
+                        dataEmail?.rows[0],
+                        process.env.REFRESH_SECRET,
+                        { expiresIn: '24h' }
+                    ) */
+                    res.status(200).send(token)
+                } else {
+                    console.log(res)
+                    return res.status(400).send(`Email or password wrong`)
+                }
             } else {
-                return res.status(400).send(`Email or password wrong`)
+            res.status(404).send("user tidak terdaftar")
             }
     } catch (error) {
         console.log(error)
-        return res.status(400).send(`Bad Request : ${error.message}`)
+        return res.status(404).send(`Bad Request : ${error.message}`)
     }
 }
 

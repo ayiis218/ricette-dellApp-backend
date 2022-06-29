@@ -10,6 +10,7 @@ require('dotenv').config()
 const userRoute = require('./routes/userRoute')
 const recipeRoute = require('./routes/recipeRoute')
 const commentRoute = require('./routes/commentRoute')
+const authRoute = require('./routes/authRoute')
 
 const port = process.env.APP_PORT || 8100
 const app = express()
@@ -36,6 +37,7 @@ app.use(
 app.use(userRoute)
 app.use(recipeRoute)
 app.use(commentRoute)
+app.use(authRoute)
 app.use('/*', (req, res) => {
   res.status(404).send('Path not found')
 })

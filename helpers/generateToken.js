@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
-const jwtSecret = proses.env.JWT_SECRET || 'secretword'
+const JWT_SECRET = proses.env.JWT_SECRET || 'secretword'
 
 const verifyJWTToken = (token) => {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, jwtSecret, (error, decodedToken) => {
+        jwt.verify(token, JWT_SECRET, (error, decodedToken) => {
             if (error || !decodedToken) {
                 return reject(error)
             }
@@ -16,9 +16,11 @@ const createJWTToken = (sessionData, expiredTime) => {
     const maxValid = expiredTime || 3600
     const token = jwt.sign({
         data: sessionData
-    }, jwtSecret, {
+    }, JWT_SECRET, {
         expiresIn: maxValid,
         algoritma: HS256
     })
     return token
 }
+
+module.exports = { verifyJWTToken, createJWTToken }
