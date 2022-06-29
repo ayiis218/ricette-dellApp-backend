@@ -33,8 +33,13 @@ const commentId = async (req, res) => {
 const createComment = async (req, res) => {
   try {
     const { id_comment, text, id_user, id_recipe } = req.body
-    const getData = await commentModel.getCreateComment({ id_comment, text, id_user, id_recipe })
-    res.send({ data: getData.rows, jumlahData: getData.rowCount })
+    const data = await commentModel.getCommentById(id_comment)
+      if ( data.rowCount > 0 ){
+        res.status(409).send(`duplicate Comment`)
+      } else {
+        const getData = await commentModel.getCreateComment({ id_comment, text, id_user, id_recipe })
+        res.status(200).send(`Success create comment id ${id}`)
+      }
   } catch (err) {
     console.log(err)
     res.status(400).send(`Error Code ${err.message}`)
@@ -43,10 +48,9 @@ const createComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
   try {
-    const { comment, id_user, id_recipe } = req.body
-    const getData = await commentModel.getUpdateComment(comment, id_user, id_recipe)
-
-    res.send({ data: getData.rows, jumlahData: getData.rowCount })
+    const { id, text, id_user, id_recipe } = req.body
+    const getData = await commentModel.getUpdateComment({id, text, id_user, id_recipe})
+    return res.status(200).send(`Success update comment id ${id}`)
 
     /* if ( getData.rowCount > 0 ) {
             const getdata = await commentModel.getUpdateComment( comment, id_user, id_recipe )

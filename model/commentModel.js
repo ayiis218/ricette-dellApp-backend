@@ -50,7 +50,7 @@ const getCommentByRecipe = (id) => {
 const getCreateComment = (data) => {
   return new Promise((resolve, reject) => {
     const  { id_comment, id_user, id_recipe, text } = data
-    conn.query('INSERT INTO comment ( id_comment, id_user, id_recipe, text ) VALUES ($1, $2, $3, $4) RETURNING *',
+    conn.query('INSERT INTO comment ( id_comment, id_users, id_recipe, text ) VALUES ($1, $2, $3, $4) RETURNING *',
     [id_comment, id_user, id_recipe, text],
       (err, res) => {
         if (err) {
@@ -65,9 +65,9 @@ const getCreateComment = (data) => {
 
 const getUpdateComment = (data, id) => {
   return new Promise((resolve, reject) => {
-    const { comment, id_user, id_recipe } = data
-    conn.query('UPDATE comment SET comment = $1, id_user = $2, id_recipe = $3 WHERE id_comment = $4',
-      [comment, id_user, id_recipe, id],
+    const { id, text, id_user, id_recipe } = data
+    conn.query('UPDATE comment SET id_comment= $1, text = $2, id_users = $3, id_recipe = $4 WHERE id_comment = $5',
+      [id, text, id_user, id_recipe, id],
       (err, res) => {
         if (err) {
           reject(new Error(`SQL : ${err.message}`))

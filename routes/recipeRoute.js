@@ -1,19 +1,29 @@
 const express = require('express')
 const Router = express.Router()
 
-const controller = require('../controllers/recipeControllers')
-const recipeImages = require('../middlewares/recipeImages')
+const {upload} = require('../middlewares/recipeImages')
+// const {uploadV} = require('../middlewares/recipeVideos')
 const {checkToken} = require('../middlewares/auth')
+const {
+    allRecipe,
+    recipeId,
+    recipeName,
+    latestRecipe,
+    pagination,
+    createRecipe,
+    updateRecipe, 
+    deletRecipe
+} = require('../controllers/recipeControllers')
 
 
-Router.get('/recipe/all', controller.allRecipe)
-Router.get('/recipe/id', controller.recipeId)
-Router.get('/recipe/name', controller.recipeName)
-Router.get('/recipe/latest', controller.latestRecipe)
-Router.get('/recipe', controller.pagination)
-Router.post('/recipe/add', recipeImages.upload, checkToken, controller.createRecipe)
-Router.put('/recipe/update/id',recipeImages.upload, checkToken, controller.updateRecipe)
-Router.delete('/recipe/delete/id', checkToken, controller.deletRecipe)
+Router.get('/recipe/all', allRecipe)
+Router.get('/recipe/id', recipeId)
+Router.get('/recipe/name', recipeName)
+Router.get('/recipe/latest', latestRecipe)
+Router.get('/recipe', pagination)
+Router.post('/recipe/add', checkToken, upload, createRecipe)
+Router.put('/recipe/update/id', checkToken, upload, updateRecipe)
+Router.delete('/recipe/delete/id', checkToken, deletRecipe)
 // router.get('/recipe/myRecipe', controller.myRecipe)
 
 module.exports = Router

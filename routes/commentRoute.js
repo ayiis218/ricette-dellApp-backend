@@ -1,13 +1,20 @@
 const express = require('express')
 const Router = express.Router()
 
-const controllers = require('../controllers/commentControllers')
+const {checkToken} = require('../middlewares/auth')
+const {
+    allComment, 
+    commentId, 
+    createComment,
+    updateComment, 
+    deleteComment
+} = require('../controllers/commentControllers')
 
-Router.get('/comment', controllers.allComment)
-Router.get('/comment/id', controllers.commentId)
-Router.post('/comment/add', controllers.createComment)
-Router.put('/comment/update/id', controllers.updateComment)
-Router.delete('/comment/delete/id', controllers.deleteComment)
+Router.get('/comment', allComment)
+Router.get('/comment/id', commentId)
+Router.post('/comment/add', checkToken, createComment)
+Router.put('/comment/update/id', checkToken, updateComment)
+Router.delete('/comment/delete/id', checkToken, deleteComment)
 // Router.get(`/comment/:id`, controllers.commentByRecipe)
 
 module.exports = Router

@@ -89,13 +89,8 @@ const updateRecipe = async (req, res) => {
       const images = req?.file?.path
       const { id, name, ingredients, videos, id_user } = req.body
       const create = new Date(Date.now())
-      const data = await recipeModel.getRecipeById(id)
-        if ( data.rowCount > 0 ){
-          res.status(409).send(`duplicate recipe`)
-        } else {
-          const getdata = await recipeModel.getUpdateRecipe({id, name, ingredients, images, videos, id_user, create})
-          return res.status(200).send(`Success update recipe id ${id}`)
-        }
+        const getdata = await recipeModel.getUpdateRecipe({id, name, ingredients, images, videos, id_user, create})
+        return res.status(200).send(`Success update recipe id ${id}`)
   } catch (error) {
     console.log(error)
     res.status(400).send(`Bad Request : ${error.message}`)
@@ -112,7 +107,7 @@ const deletRecipe = async (req, res) => {
       } */
       const getData = await recipeModel.getDeleteRecipe(id)
         if (getData.rowCount > 0) {
-          res.status(200).send(`Success delete user id ${id}`)
+          res.status(200).send(`Success delete recipe id ${id}`)
         } else {
           res.status(404).send('Not found')
         }
