@@ -70,7 +70,11 @@ const deleteComment = async (req, res) => {
   try {
     const { id } = req.body
     const getdata = await commentModel.getDeleteComment(id)
-    res.status(200).send(`Success delete user id ${id}`)
+    if (getData.rowCount > 0) {
+       res.status(200).send(`Success delete comment id ${id}`)
+    } else {
+      res.status(404).send('Not found')
+    }
   } catch (err) {
     res.status(400).send(`Error Code ${err.message}`)
   }
