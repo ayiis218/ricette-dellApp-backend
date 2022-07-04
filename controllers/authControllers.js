@@ -1,87 +1,64 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-/* const generateToken = require('../middlewares/generateToken')
-const randomToken = require('/middlewares/randomToken') */
-const userModel = require('../model/userModel')
-
-
-const register = async (req, res) => {
-    try {
-        const photo = req?.file?.path
-        const { id, name, email, password, phone } = req.body
-
-        const salt = await bcrypt.genSalt()
-        const hash = await bcrypt.hash(password, salt)
-
-        const data = await userModel.getUserById(id)
-        const dataEmail = await userModel.getUserByEmail(email)
-            if ( data.rowCount > 0 ){
-                return res.status(409).send(`duplicate user`)
-            } else if ( dataEmail.rowCount > 0) {
-                return res.status(409).send(`duplicate email`)
-            } else {
-                const getData = await userModel.getCreateUser({ id, name, email, password: hash, photo, phone })
-                return res.status(200).send(`Success create user id ${id}`)
-            }
-    } catch (error) {
-        console.log(error)
-        return res.status(400).send(`Bad Request : ${error.message}`)
-    }
-}
-
-const login = async (req, res) => {
-    try {
-        const { email, password } = req.body
-        const dataEmail = await userModel.getUserByEmail(email)
-            if (dataEmail.rowCount > 0) {
-            const checkPass = bcrypt.compare(password, dataEmail.rows[0].password)
-                if (checkPass) {
-                    const token = jwt.sign(
-                        dataEmail?.rows[0],
-                        process.env.JWT_SECRET,
-                        { expiresIn: '24h' }
-                    )
-                    /* const refreshToken = jwt.sign(
-                        dataEmail?.rows[0],
-                        process.env.REFRESH_SECRET,
-                        { expiresIn: '24h' }
-                    ) */
-                    res.status(200).send(token)
-                } else {
-                    console.log(res)
-                    return res.status(400).send(`Email or password wrong`)
-                }
-            } else {
-            res.status(404).send("user tidak terdaftar")
-            }
-    } catch (error) {
-        console.log(error)
-        return res.status(404).send(`Bad Request : ${error.message}`)
-    }
-}
-
-/* const login2 = async (req,res) => {
-    const email = req.body.email || ''
-    const password = req.body.password || ''
-
-    res.status(200)
-    res.json({
-        status: 'Ok',
-        message: 'login succes',
-        payload: {
-            token: JWTAction.createJWTToken({
-                username:'ayiis', 
-                role: 'admin'
-            }),
-            data: {
-                username: 'ayi', 
-                role: 'admin'
-            }             
-        }
-    })
-} */
+const { 
+    getUserById,
+    getUserByEmail,
+    getCreateUser
+ } = require('../model/userModel')
 
 module.exports = {
-    register,
-    login
+    register: async (req, res) => {
+        try {
+            const { photo } = req?.file?.path 
+            const { id, name, email, password, repass, phone } = req.body
+            
+            const dataUser = await getUserById(id)
+            const dataEmail = await getUserByEmail(email)
+            if (dataUser.rowsCount > 0) {
+                return res.status(409).send({msg: `duplicate user`})
+            } else if (dataEmail.rowCount > 0) {
+                return res.status(409).send({msg: `duplicate email`})
+            } else {
+                if ( password == repass ) {
+                    // const salt = bcrypt.genSaltSync(10)
+                    bcrypt.hash (password, 10).then((hash) => {
+                        const getData = getCreateUser({ id, name, email, password: hash, photo, phone})
+                        return res.status(200).send({ 
+                            msg: `Success create user id ${id}`, 
+                            data: getData.rows, 
+                            amount: getData.rowCount 
+                        })
+                    })
+                } else {
+                    return res.status(400).send({msg: `incorrect password`})
+                }
+            }
+        } catch (error) {
+            return res.status(404).send({ msg: err.message})
+        }
+    },
+    login: async (req, res) => {
+        try {
+            const { email, password } = req.body
+            const dataEmail = await getUserByEmail(email, password)
+            const hashPass = dataEmail?.rows[0]?.password
+            if (dataEmail.rowCount > 0) {
+                bcrypt.compare(password, hashPass).then( (result) => {
+                    const token = jwt.sign(
+                        dataEmail.rows[0],
+                        process.env.JWT_SECRET,
+                        {expiresIn: '24h'}
+                    )
+                    return res.status(200).send({ 
+                        msg: `Success login`, 
+                        token: token
+                    })
+                })
+            } else {
+                return res.status(200).send({msg: `please register in application`})
+            }
+        } catch (error) {
+            res.status(404).send({ msg: err.message})
+        }
+    }
 }
