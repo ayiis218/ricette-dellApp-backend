@@ -3,14 +3,7 @@ const cors = require('cors')
 const xss = require('xss-clean')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
-const bcrypt = require('bcrypt')
 require('dotenv').config()
-
-// const Router = require ('./routes/routes')
-const userRoute = require('./routes/userRoute')
-const recipeRoute = require('./routes/recipeRoute')
-const commentRoute = require('./routes/commentRoute')
-const authRoute = require('./routes/authRoute')
 
 const port = process.env.APP_PORT || 8100
 const app = express()
@@ -33,13 +26,13 @@ app.use(
   })
 )
 
-// app.use('/', Router)
-app.use(userRoute)
-app.use(recipeRoute)
-app.use(commentRoute)
-app.use(authRoute)
+// app.use(require ('./routes/routes'))
+app.use(require('./routes/userRoute'))
+app.use(require('./routes/recipeRoute'))
+app.use(require('./routes/commentRoute'))
+app.use(require('./routes/authRoute'))
 app.use('/*', (req, res) => {
-  res.status(404).send('Path not found')
+  res.status(404).send({error: '404', msg: `Path not found`})
 })
 
 app.listen(port, () => {

@@ -7,7 +7,6 @@ const file = multer.diskStorage({
 	},
   
 	filename: (req, file, cb) => {
-		// const fileName = file.originalname.toLowerCase().split(' ').join('-')
 		const ext = path.extname(file.originalname)
 		const fileName = `${Date.now()}_${Math.random()}_${ext}`
 		cb(null, fileName)
@@ -29,7 +28,8 @@ const uploadImages = multer({
 }).single('images')
 
 const upload = (req, res, next) => {
-	uploadImages(req, res, (err) => {
+	uploadImages(req, res, 
+		(err) => {
 			if (err instanceof multer.MulterError) {
 				return res.status(400).send(err?.message ?? '')
 			} 
