@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "simonsiefke.prettier-vscode",
+        "dzhavat.bracket-pair-toggler",
+        "formulahendry.auto-rename-tag",
+        "chenxsan.vscode-standardjs"
+    ]
+}
