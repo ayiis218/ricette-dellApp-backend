@@ -5,14 +5,18 @@ const helmet = require('helmet')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
-const port = process.env.APP_PORT || 8100
+const port = process.env.PORT || 8120
 const app = express()
 
-const option = {
-  origin: 'http://localhost:8080',
+/* const option = {
+  origin: 'http://localhost:3000',
   optionSuccessStatus: 200
 }
-app.use(cors(option))
+app.use(cors(option)) */
+
+app.use(cors())
+app.options('*', cors())
+app.use(express.static('public'))
 
 app.use(xss())
 
@@ -27,6 +31,7 @@ app.use(
 )
 
 // app.use(require ('./routes/routes'))
+// app.use('/picture/recipe', express.static('picture'))
 app.use(require('./routes/userRoute'))
 app.use(require('./routes/recipeRoute'))
 app.use(require('./routes/commentRoute'))

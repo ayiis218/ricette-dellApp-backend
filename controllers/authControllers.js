@@ -9,13 +9,14 @@ const {
 module.exports = {
     register: async (req, res) => {
         try {
-            const { photo } = req?.file?.path 
-            const { id, name, email, password, repass, phone } = req.body
+            const photo = req?.file?.path 
+            const { name, email, password, repass, phone } = req.body
+            const id  = Math.floor(Math.random() * 100);
             
-            const dataUser = await getUserById(id)
+            // const dataUser = await getUserById(id)
             const dataEmail = await getUserByEmail(email)
-            if (dataUser.rowsCount > 0) {
-                return res.status(409).send({msg: `duplicate user`})
+            if (dataEmail?.rows[0]?.id_users < 1) {
+                return res.status(409).send({msg: `incorrect`})
             } else if (dataEmail.rowCount > 0) {
                 return res.status(409).send({msg: `duplicate email`})
             } else {
@@ -24,7 +25,7 @@ module.exports = {
                     bcrypt.hash (password, 10).then((hash) => {
                         const getData = getCreateUser({ id, name, email, password: hash, photo, phone})
                         return res.status(200).send({ 
-                            msg: `Success create user id ${id}`, 
+                            msg: `Success create user`, 
                             data: getData.rows, 
                             amount: getData.rowCount 
                         })
@@ -33,7 +34,7 @@ module.exports = {
                     return res.status(400).send({msg: `incorrect password`})
                 }
             }
-        } catch (error) {
+        } catch (err) {
             return res.status(404).send({ msg: err.message})
         }
     },
