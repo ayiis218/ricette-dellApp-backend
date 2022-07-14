@@ -11,7 +11,7 @@ module.exports = {
         try {
             const photo = req?.file?.path 
             const { name, email, password, repass, phone } = req.body
-            const id  = Math.floor(Math.random() * 100);
+            // const id  = Math.floor(Math.random() * 100);
             
             // const dataUser = await getUserById(id)
             const dataEmail = await getUserByEmail(email)
@@ -23,7 +23,7 @@ module.exports = {
                 if ( password == repass ) {
                     // const salt = bcrypt.genSaltSync(10)
                     bcrypt.hash (password, 10).then((hash) => {
-                        const getData = getCreateUser({ id, name, email, password: hash, photo, phone})
+                        const getData = getCreateUser({ name, email, password: hash, photo, phone})
                         return res.status(200).send({ 
                             msg: `Success create user`, 
                             data: getData.rows, 
