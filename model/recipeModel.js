@@ -91,9 +91,9 @@ module.exports = {
   
   getCreateRecipe: (data) => {
     return new Promise((resolve, reject) => {
-      const { id, name, ingredients, images, video, id_user, create } = data
-      conn.query('INSERT INTO recipe ( id_recipe, name_recipe, ingredients, images, video, id_users, create_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-        [id, name, ingredients, images, video, id_user, create],
+      const { name, ingredients, images, video, id_user, create } = data
+      conn.query('INSERT INTO recipe ( name_recipe, ingredients, images, video, id_users, create_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+        [name, ingredients, images, video, id_user, create],
         (err, res) => {
           if (err) {
             reject(new Error(`SQL : ${err.message}`))

@@ -97,13 +97,13 @@ module.exports = {
   createRecipe: async (req, res) => {
     try {
       const images = req?.file?.path
-      const { id, name, ingredients, video, id_user } = req.body
+      const { name, ingredients, video, id_user } = req.body
       const create = new Date(Date.now())
       const data = await getRecipeById(id)
         if ( data.rowCount > 0 ){
           res.status(409).send({msg: `duplicate recipe`})
         } else {
-          const getData = await getCreateRecipe({id, name, ingredients, images, video, id_user, create})
+          const getData = await getCreateRecipe({name, ingredients, images, video, id_user, create})
           return res.status(200).send({ 
             msg: `Success create recipe id ${id}`, 
             data: getData.rows, 
