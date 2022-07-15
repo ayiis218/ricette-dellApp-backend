@@ -50,9 +50,9 @@ module.exports = {
   
   getCreateComment: (data) => {
     return new Promise((resolve, reject) => {
-      const  { id_comment, id_user, id_recipe, text } = data
-      conn.query('INSERT INTO comment ( id_comment, id_users, id_recipe, text ) VALUES ($1, $2, $3, $4) RETURNING *',
-      [id_comment, id_user, id_recipe, text],
+      const  { id_user, id_recipe, text } = data
+      conn.query('INSERT INTO comment ( id_users, id_recipe, text ) VALUES ($1, $2, $3) RETURNING *',
+      [id_user, id_recipe, text],
         (err, res) => {
           if (err) {
             reject(new Error(`SQL : ${err.message}`))

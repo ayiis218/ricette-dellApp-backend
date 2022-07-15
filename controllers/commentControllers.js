@@ -40,8 +40,8 @@ module.exports = {
   
   createComment: async (req, res) => {
     try {
-      const { id, id_user, id_recipe, text } = req.body
-        const getData = await commentModel.getCreateComment({ id, text, id_user, id_recipe })
+      const {id_user, id_recipe, text } = req.body
+        const getData = await commentModel.getCreateComment({ text, id_user, id_recipe })
         res.status(200).send({ 
           msg: `Success create comment id ${id}`, 
           data: getData.rows, 
