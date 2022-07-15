@@ -43,7 +43,7 @@ module.exports = {
       const {id_user, id_recipe, text } = req.body
         const getData = await commentModel.getCreateComment({ text, id_user, id_recipe })
         res.status(200).send({ 
-          msg: `Success create comment id ${id}`, 
+          msg: `Success create comment id`, 
           data: getData.rows, 
           amount: getData.rowCount 
         })
