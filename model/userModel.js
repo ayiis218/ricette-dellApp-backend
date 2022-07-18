@@ -42,9 +42,9 @@ module.exports = {
   
   getCreateUser: (data) => {
     return new Promise((resolve, reject) => {
-      const { id, name, email, password, photo, phone } = data
-      conn.query('INSERT INTO users ( id_users, name, email, password, photo, phone ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [id, name, email, password, photo, phone],
+      const { name, email, password, photo, phone } = data
+      conn.query('INSERT INTO users ( name, email, password, photo, phone ) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [name, email, password, photo, phone],
         (err, res) => {
           if (err) {
             reject(new Error(`SQL : ${err.message}`))
