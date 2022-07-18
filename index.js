@@ -32,6 +32,9 @@ app.use(
 
 // app.use(require ('./routes/routes'))
 // app.use('/picture/recipe', express.static('picture'))
+app.use('/', (req, res) => {
+  res.status(404).send('Selamat datang')
+})
 app.use(require('./routes/userRoute'))
 app.use(require('./routes/recipeRoute'))
 app.use(require('./routes/commentRoute'))
