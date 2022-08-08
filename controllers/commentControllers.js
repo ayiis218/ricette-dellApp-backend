@@ -3,13 +3,20 @@ const commentModel = require('../model/commentModel')
 module.exports = { 
   allComment: async (req, res) => {
     try {
-      const { id } = req.body
-      const getData = await commentModel.getAllComment(id)
-      res.status(200).send({ 
-        msg: `all comment`, 
-        data: getData.rows, 
-        amount: getData.rowCount 
-      })
+      const getData = await commentModel.getAllComment()
+      if (getData.rowCount <= 0 ) {
+        res.status(400).send({ 
+          msg: `Data not found`, 
+          data: getData.rows, 
+          amount: getData.rowCount 
+        })
+      } else {
+        res.status(200).send({ 
+          msg: `all comment`, 
+          data: getData.rows, 
+          amount: getData.rowCount 
+        })
+      }
     } catch (err) {
       res.status(404).send({ msg: `Error Code ${err.message}`})
     }
@@ -19,11 +26,19 @@ module.exports = {
     try {
       const { id } = req.body
       const getData = await commentModel.getCommentById(id)
-      res.status(200).send({ 
-        msg: `comment id ${id}`, 
-        data: getData.rows, 
-        amount: getData.rowCount 
-      })
+      if (getData.rowCount <= 0 ) {
+        res.status(400).send({ 
+          msg: `Data not found`, 
+          data: getData.rows, 
+          amount: getData.rowCount 
+        })
+      } else {
+        res.status(200).send({ 
+          msg: `comment id ${id}`, 
+          data: getData.rows, 
+          amount: getData.rowCount 
+        })
+      }
     } catch (err) {
       res.status(404).send({ msg: `Error Code ${err.message}`})
     }
@@ -48,31 +63,38 @@ module.exports = {
           amount: getData.rowCount 
         })
     } catch (err) {
-      console.log(err)
       res.status(404).send({ msg: `Error Code ${err.message}`})
     }
   },
   
   updateComment: async (req, res) => {
     try {
-      const { id, text, id_user, id_recipe } = req.body
-      const getData = await commentModel.getUpdateComment({id, text, id_user, id_recipe})
-      res.status(200).send({ 
-        msg: `Success update comment id ${id}`, 
-        data: getData.rows, 
-        amount: getData.rowCount 
-      })
-  
-      /* if ( getData.rowCount > 0 ) {
-              const getData = await commentModel.getUpdateComment( comment, id_user, id_recipe )
-              if (getData) {
-                  res.send(`${message}, sukses`)
-              } else {
-                  res.status(400).send('Error data')
-              }
-          } */
+      const { id, text } = req.body
+      const getData = await commentModel.getCommentById(id)
+      if ( data.rowCount > 0) {
+        const newText = text || getData.rows[0]?.text
+        const id_user = getData.rows[0]?.id_users
+        const id_recipe = getData.rows[0]?.id_recipe
+        const updateData = await commentModel.getUpdateComment({id, text: newText, id_user, id_recipe})
+        if (updateData) {
+          res.status(200).send({ 
+            msg: `Success update comment id ${id}`, 
+            data: updateData.rows, 
+            amount: updateData.rowCount 
+          })
+        } else {
+          res.status(400).send({ 
+            msg: `Update data failed ${id}`, 
+            data: updateData.rows, 
+            amount: updateData.rowCount 
+          })
+        }
+      } else {
+        res.status(400).send({ 
+          msg: `Not found comment id ${id}`, 
+        })
+      }
     } catch (err) {
-      console.log(err)
       res.status(404).send({ msg: `Error Code ${err.message}`})
     }
   },
@@ -89,7 +111,7 @@ module.exports = {
         })
       } else {
         res.status(400).send({ 
-          msg: `Not pound comment id ${id}`, 
+          msg: `Not found comment id ${id}`, 
           data: getData.rows, 
           amount: getData.rowCount 
         })
