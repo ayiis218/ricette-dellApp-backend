@@ -3,9 +3,9 @@ const conn = require('../config/database')
 module.exports = { 
     getRegister: (data) => {
         return new Promise ((resolve, reject) => {
-            const { name, email, password, photo, phone, level } = data
-            conn.query(`INSERT INTO users ( name, email, password, photo, phone, level ) VALUES ( $1, $2, $3, $4, $5, $6 ) RETURNING *`, 
-            [name, email, password, photo, phone,level ], (err, res) => {
+            const { name, email, password, phone, photo, level } = data
+            conn.query(`INSERT INTO users ( name, email, password, phone, photo, level ) VALUES ( $1, $2, $3, $4, $5, $6 ) RETURNING *`, 
+            [name, email, password, phone, photo,level ], (err, res) => {
                 if (err) {
                     reject (new Error (`SQL : ${err.message}`))
                 } else {
