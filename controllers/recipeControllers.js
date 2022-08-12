@@ -31,7 +31,11 @@ module.exports = {
          search = search || '';
          const result = await getRecipe(search);
          if (!result.rowCount) {
-            res.status(404).send({ msg: `Data Not Found` });
+            res.status(400).send({
+               msg: `Data Not Found`,
+               data: result.rows,
+               amount: result.rowCount,
+            });
          } else {
             res.status(200).send({
                msg: `recipe`,
