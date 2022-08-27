@@ -53,7 +53,7 @@ module.exports = {
    getRecipeById: (id) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, recipe.create_at
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
       FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE id_recipe = $1`,
             [id],
             (err, res) => {
