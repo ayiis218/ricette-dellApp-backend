@@ -54,6 +54,24 @@ module.exports = {
       });
    },
 
+   getCommentByRecipe: (id) => {
+      return new Promise((resolve, reject) => {
+         conn.query(
+            `SELECT comment.id_comment, recipe.id_recipe, recipe.name_recipe, comment.text, users.name, users.photo FROM comment 
+      INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
+      INNER JOIN users ON comment.id_users = users.id_users WHERE id_recipe = $1`,
+            [id],
+            (err, res) => {
+               if (err) {
+                  reject(new Error(`SQL : ${err.message}`));
+               } else {
+                  resolve(res);
+               }
+            }
+         );
+      });
+   },
+
    getCreateComment: (data) => {
       return new Promise((resolve, reject) => {
          const { id_user, id_recipe, text } = data;

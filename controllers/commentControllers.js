@@ -44,14 +44,27 @@ module.exports = {
       }
    },
 
-   /* const commentByRecipe = async (req, res) => {
+   commentByRecipe: async (req, res) => {
       try {
-          const { name } = req.body
-          const result = await recipeModel.recipeById
-      } catch (error) {
-          return failed(res, 400, 'failed', `Bad Request : ${error.message} `)
+         const id = parseInt(req.params.id, 10);
+         const getData = await commentModel.getCommentById(id);
+         if (getData.rowCount <= 0) {
+            res.status(400).send({
+               msg: `Data not found`,
+               data: getData.rows,
+               amount: getData.rowCount,
+            });
+         } else {
+            res.status(200).send({
+               msg: `comment id ${id}`,
+               data: getData.rows,
+               amount: getData.rowCount,
+            });
+         }
+      } catch (err) {
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
-  } */
+   },
 
    createComment: async (req, res) => {
       try {
