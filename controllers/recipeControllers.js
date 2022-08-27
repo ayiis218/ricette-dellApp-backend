@@ -121,7 +121,7 @@ module.exports = {
    pagination: async (req, res) => {
       try {
          const { page } = req.query || 1;
-         const { limit } = req.query || 5;
+         const { limit } = req.query || 10;
 
          const data = await getAllRecipe();
          const getData = await getCount({ limit, page });
