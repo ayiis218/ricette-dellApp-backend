@@ -39,27 +39,9 @@ module.exports = {
    getCommentByRecipe: (id) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT comment.id_comment, recipe.name_recipe, comment.text, users.name, users.photo FROM comment 
+            `SELECT comment.id_comment, comment.id_recipe, recipe.name_recipe, comment.text, users.name, users.photo FROM comment 
       INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
-      INNER JOIN users ON comment.id_users = users.id_users WHERE id_recipe = $1`,
-            [id],
-            (err, res) => {
-               if (err) {
-                  reject(new Error(`SQL : ${err.message}`));
-               } else {
-                  resolve(res);
-               }
-            }
-         );
-      });
-   },
-
-   getCommentByRecipe: (id) => {
-      return new Promise((resolve, reject) => {
-         conn.query(
-            `SELECT comment.id_comment, recipe.id_recipe, recipe.name_recipe, comment.text, users.name, users.photo FROM comment 
-      INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
-      INNER JOIN users ON comment.id_users = users.id_users WHERE id_recipe = $1`,
+      INNER JOIN users ON comment.id_users = users.id_users WHERE comment.id_recipe = $1`,
             [id],
             (err, res) => {
                if (err) {

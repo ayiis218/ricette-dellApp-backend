@@ -47,7 +47,7 @@ module.exports = {
    commentByRecipe: async (req, res) => {
       try {
          const id = parseInt(req.params.id, 10);
-         const getData = await commentModel.getCommentById(id);
+         const getData = await commentModel.getCommentByRecipe(id);
          if (getData.rowCount <= 0) {
             res.status(400).send({
                msg: `Data not found`,
