@@ -41,7 +41,7 @@ module.exports = {
          conn.query(
             `SELECT comment.id_comment, comment.id_recipe, recipe.name_recipe, comment.text, users.name, users.photo FROM comment 
       INNER JOIN recipe ON comment.id_recipe = recipe.id_recipe 
-      INNER JOIN users ON comment.id_users = users.id_users WHERE comment.id_recipe = $1 ORDER BY recipe.id_recipe DESC`,
+      INNER JOIN users ON comment.id_users = users.id_users WHERE comment.id_recipe = $1 ORDER BY id_comment DESC`,
             [id],
             (err, res) => {
                if (err) {
