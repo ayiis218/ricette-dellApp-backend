@@ -62,6 +62,7 @@ module.exports = {
                res.send({
                   msg: `Success login`,
                   token: token,
+                  user: dataEmail.rows[0].id_users,
                });
             } else {
                res.status(404).send({ msg: 'incorrect password' });
