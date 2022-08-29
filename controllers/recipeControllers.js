@@ -166,10 +166,10 @@ module.exports = {
 
    updateRecipe: async (req, res) => {
       try {
-         const images = req?.file?.path || 'picture/recipe/original.jpg';
          const id = parseInt(req.params.id, 10);
          const data = await getRecipeById(id);
          if (data.rowCount > 0) {
+            const images = req?.file?.path || data?.rows[0]?.images;
             const name = req?.body?.name || data?.rows[0]?.name_recipe;
             const ingredients =
                req?.body?.ingredients || data?.rows[0]?.ingredients;
