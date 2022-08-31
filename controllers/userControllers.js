@@ -81,12 +81,12 @@ module.exports = {
 
    updateUser: async (req, res) => {
       try {
-         const photo = req?.file?.path || 'picture/user/chef.jpg';
          const id = parseInt(req.params.id, 10);
          const data = await getUserById(id);
          if (data.rowCount > 0) {
+            const photo = req?.file?.path || data?.rows[0]?.photo;
             const name = req?.body?.name || data?.rows[0]?.name;
-            const email = req?.body?.email || data?.rows[0].email;
+            const email = req?.body?.email || data?.rows[0]?.email;
             const password = req?.body?.password;
             const phone = req?.body?.pone || data?.rows[0]?.phone;
             const repass = req?.body.repass;
