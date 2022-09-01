@@ -27,8 +27,8 @@ This is an example of how to list things you need to use the software and how to
 
 ### Requirements
 * [Node.js](https://nodejs.org/en/)
-* [Postman](https://www.getpostman.com/) for testing
-* [Database]
+* [Postman](https://www.getpostman.com/)
+* [Database]()
 
 ## Installation
 - Clone my repositories
