@@ -53,7 +53,7 @@ module.exports = {
             });
          }
       } catch (err) {
-         res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -127,7 +127,7 @@ module.exports = {
             }
          }
       } catch (err) {
-         return res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -172,7 +172,7 @@ module.exports = {
             });
          }
       } catch (err) {
-         return res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 

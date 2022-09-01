@@ -57,7 +57,9 @@ module.exports = {
                const token = jwt.sign(
                   dataEmail.rows[0],
                   process.env.JWT_SECRET,
-                  { expiresIn: '24h' }
+                  {
+                     expiresIn: '24h',
+                  }
                );
                res.send({
                   msg: `Success login`,

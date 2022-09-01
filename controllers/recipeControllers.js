@@ -75,7 +75,7 @@ module.exports = {
 
    recipeSearch: async (req, res) => {
       try {
-         let search = req?.params.name;
+         let search = req?.params?.name;
          search = search || '';
          const getData = await getRecipe(search);
          if (getData.rowCount > 0) {
@@ -134,28 +134,9 @@ module.exports = {
       }
    },
 
-   recipeName: async (req, res) => {
-      try {
-         const { name } = req.body;
-         const getData = await getRecipeByName(name);
-         if (getData.rowCount > 0) {
-            res.status(200).send({
-               msg: `recipe by name ${name}`,
-               data: getData.rows,
-               amount: getData.rowCount,
-            });
-         } else {
-            res.status(404).send({ msg: `Data Not Found` });
-         }
-      } catch (err) {
-         console.log(err);
-         res.status(404).send({ msg: err.message });
-      }
-   },
-
    latestRecipe: async (req, res) => {
       try {
-         const { limit } = req.query || 5;
+         const { limit } = req?.query || 5;
          const getData = await getLatestRecipe(limit);
          res.status(200).send({
             msg: `all new recipe`,
@@ -184,7 +165,7 @@ module.exports = {
          res.status(404).send({ msg: `Data Not Found` });
       } catch (err) {
          console.log(err);
-         res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -208,7 +189,7 @@ module.exports = {
          });
       } catch (err) {
          console.log(err);
-         return res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -245,7 +226,7 @@ module.exports = {
          }
       } catch (err) {
          console.log(err);
-         res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -263,7 +244,7 @@ module.exports = {
             res.status(404).send({ msg: `Data Not Found` });
          }
       } catch (error) {
-         res.status(404).send({ msg: err.message });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 };

@@ -1,23 +1,23 @@
-const express = require('express');
+const express = require("express");
 const Router = express.Router();
 
-const { upload } = require('../middlewares/userImages');
-const { tokenVerify } = require('../middlewares/auth');
+const { upload } = require("../middlewares/userImages");
+const { tokenVerify } = require("../middlewares/auth");
 const {
-   listUser,
-   allUser,
-   UserId,
-   createUser,
-   updateUser,
-   deleteUser,
-} = require('../controllers/userControllers');
+  listUser,
+  allUser,
+  UserId,
+  createUser,
+  updateUser,
+  deleteUser,
+} = require("../controllers/userControllers");
 
-Router.get('/users', listUser);
-Router.get('/users/all', allUser);
-Router.post('/users/add', tokenVerify, upload, createUser);
-Router.get('/users/:id', UserId);
-Router.put('/users/update/:id', tokenVerify, upload, updateUser);
-Router.delete('/user/delete/:id', tokenVerify, deleteUser);
+Router.get("/users", listUser);
+Router.get("/users/all", allUser);
+Router.post("/users/add", tokenVerify, upload, createUser);
+Router.get("/users/:id", UserId);
+Router.put("/users/update/:id", tokenVerify, upload, updateUser);
+Router.delete("/user/delete/:id", tokenVerify, deleteUser);
 /*Router.put('/users/update/id', controller.updatePhoto)
 Router.put('/users/update/id', controller.updatepass) */
 

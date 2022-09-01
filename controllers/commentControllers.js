@@ -156,8 +156,8 @@ module.exports = {
             if (updateData) {
                res.status(200).send({
                   msg: `Success update comment id ${id}`,
-                  data: updateData.rows,
-                  amount: updateData.rowCount,
+                  data: getData.rows,
+                  amount: getData.rowCount,
                });
             } else {
                res.status(400).send({
@@ -172,7 +172,7 @@ module.exports = {
             });
          }
       } catch (err) {
-         res.status(400).send({ msg: `Error Code ${err.message}` });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 
@@ -194,7 +194,7 @@ module.exports = {
             });
          }
       } catch (err) {
-         res.status(400).send({ msg: `Error Code ${err.message}` });
+         res.status(404).send({ msg: `Error Code ${err.message}` });
       }
    },
 };

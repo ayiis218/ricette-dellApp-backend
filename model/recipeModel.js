@@ -16,8 +16,9 @@ module.exports = {
    getListRecipe: (field, search, sort, type, limit, offset) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE ${field} ILIKE ('%${search}%') ORDER BY ${sort} ${type} LIMIT $1 OFFSET $2`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users WHERE ${field} ILIKE ('%${search}%') ORDER BY ${sort} ${type} LIMIT $1 OFFSET $2`,
             [limit, offset],
             (err, res) => {
                if (err) {
@@ -32,8 +33,9 @@ module.exports = {
    getAllRecipe: () => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC`,
             (err, res) => {
                if (err) {
                   reject(new Error(`SQL : ${err.message}`));
@@ -48,8 +50,9 @@ module.exports = {
    getRecipe: (search) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE name_recipe ILIKE ('%${search}%') ORDER BY create_at ASC`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users WHERE name_recipe ILIKE ('%${search}%') ORDER BY create_at ASC`,
             (err, res) => {
                if (err) {
                   reject(new Error(`SQL : ${err.message}`));
@@ -65,8 +68,9 @@ module.exports = {
       return new Promise((resolve, reject) => {
          const { page } = data;
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC LIMIT 5 OFFSET (($1 -1) * 5)`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users ORDER BY id_recipe ASC LIMIT 5 OFFSET (($1 -1) * 5)`,
             [page],
             (err, res) => {
                if (err) {
@@ -82,8 +86,9 @@ module.exports = {
    getRecipeById: (id) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE id_recipe = $1`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users WHERE id_recipe = $1`,
             [id],
             (err, res) => {
                if (err) {
@@ -98,8 +103,9 @@ module.exports = {
    getRecipeByUser: (id) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users WHERE users.id_users = $1`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users WHERE users.id_users = $1`,
             [id],
             (err, res) => {
                if (err) {
@@ -114,8 +120,9 @@ module.exports = {
    getLatestRecipe: (limit) => {
       return new Promise((resolve, reject) => {
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY recipe.id_recipe DESC LIMIT $1`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users ORDER BY recipe.id_recipe DESC LIMIT $1`,
             [limit],
             (err, res) => {
                if (err) {
@@ -131,8 +138,9 @@ module.exports = {
       return new Promise((resolve, reject) => {
          const { limit } = data;
          conn.query(
-            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at
-      FROM recipe INNER JOIN users ON users.id_users = recipe.id_users ORDER BY recipe.id_recipe DESC LIMIT $1`,
+            `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.name, recipe.create_at 
+            FROM recipe 
+            INNER JOIN users ON users.id_users = recipe.id_users ORDER BY recipe.id_recipe DESC LIMIT $1`,
             [limit],
             (err, res) => {
                if (err) {
