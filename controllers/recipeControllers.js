@@ -1,11 +1,12 @@
-// const deleteFile= require('../middlewares/deleteImages')
+// const deleteFile = require('../helpers/deleteFile');
 const {
+   getListRecipe,
    getAllRecipe,
    getRecipe,
    getCount,
+   getCountRecipe,
    getRecipeById,
    getRecipeByUser,
-   getRecipeByName,
    getLatestRecipe,
    getCreateRecipe,
    getUpdateRecipe,
@@ -13,11 +14,57 @@ const {
 } = require('../model/recipeModel');
 
 module.exports = {
+   listRecipe: async (req, res) => {
+      try {
+         const { page, limit } = req?.query;
+         const field = req?.query?.field || 'name_recipe';
+         const search = req?.query?.search || '';
+         const sort = req?.query?.sort || 'id_recipe';
+         const type = req?.query?.type || 'ASC';
+         const pages = Number(page) || 1;
+         const limits = Number(limit) || 5;
+         const offset = (pages - 1) * limit;
+
+         const count = await getCountRecipe();
+         const amount = Number(count?.rows[0]?.total);
+         const totalPage = Math.ceil(amount / limit);
+
+         const getData = await getListRecipe(
+            field,
+            search,
+            sort,
+            type,
+            limits,
+            offset
+         );
+         const pagination = {
+            pages: pages,
+            limits: limits,
+            offsets: totalPage,
+            amount,
+         };
+         if (getData.rowCount > 0) {
+            res.status(200).send({
+               msg: `success`,
+               data: getData.rows,
+               pagination,
+            });
+         } else {
+            res.status(404).send({
+               code: 404,
+               msg: `Data Not Found`,
+            });
+         }
+      } catch (err) {
+         res.status(404).send({ msg: err.message });
+      }
+   },
+
    allRecipe: async (req, res) => {
       try {
          const getData = await getAllRecipe();
          res.status(200).send({
-            msg: `all recipe`,
+            msg: `success`,
             data: getData.rows,
             amount: getData.rowCount,
          });
@@ -25,20 +72,21 @@ module.exports = {
          res.status(404).send({ msg: err.message });
       }
    },
+
    recipeSearch: async (req, res) => {
       try {
          let search = req?.params.name;
          search = search || '';
-         const result = await getRecipe(search);
-         if (!result.rowCount) {
-            res.status(400).send({
-               msg: `Data Not Found`,
+         const getData = await getRecipe(search);
+         if (getData.rowCount > 0) {
+            res.status(200).send({
+               msg: `success`,
                data: result.rows,
                amount: result.rowCount,
             });
          } else {
-            res.status(200).send({
-               msg: `recipe`,
+            res.status(400).send({
+               msg: `Data Not Found`,
                data: result.rows,
                amount: result.rowCount,
             });
@@ -47,6 +95,7 @@ module.exports = {
          res.status(404).send({ msg: err.message });
       }
    },
+
    recipeId: async (req, res) => {
       try {
          const id = parseInt(req.params.id, 10);
@@ -123,8 +172,7 @@ module.exports = {
          const { page } = req.query || 1;
          const { limit } = req.query || 10;
 
-         const data = await getAllRecipe();
-         const getData = await getCount({ limit, page });
+         const getData = await getCount(limit, page);
 
          if (getData) {
             return res.status(200).send({
@@ -167,14 +215,14 @@ module.exports = {
    updateRecipe: async (req, res) => {
       try {
          const id = parseInt(req.params.id, 10);
-         const data = await getRecipeById(id);
-         if (data.rowCount > 0) {
-            const images = req?.file?.path || data?.rows[0]?.images;
-            const name = req?.body?.name || data?.rows[0]?.name_recipe;
+         const getData = await getRecipeById(id);
+         if (getData.rowCount > 0) {
+            const images = req?.file?.path || getData?.rows[0]?.images;
+            const name = req?.body?.name || getData?.rows[0]?.name_recipe;
             const ingredients =
-               req?.body?.ingredients || data?.rows[0]?.ingredients;
-            const video = req?.body?.video || data?.rows[0]?.video;
-            const id_user = data?.rows[0]?.id_users;
+               req?.body?.ingredients || getData?.rows[0]?.ingredients;
+            const video = req?.body?.video || getData?.rows[0]?.video;
+            const id_user = getData?.rows[0]?.id_users;
             const create = new Date(Date.now());
             await getUpdateRecipe({
                id,
@@ -187,8 +235,8 @@ module.exports = {
             });
             return res.status(200).send({
                msg: `Success update recipe by id ${id}`,
-               data: data.rows,
-               amount: data.rowCount,
+               data: getData.rows,
+               amount: getData.rowCount,
             });
          } else {
             return res.status(200).send({
@@ -206,7 +254,11 @@ module.exports = {
          const id = parseInt(req.params.id, 10);
          const getData = await getDeleteRecipe(id);
          if (getData.rowCount > 0) {
-            res.status(200).send({ msg: `Success delete recipe id ${id}` });
+            res.status(200).send({
+               msg: `success`,
+               data: getData.rows,
+               amount: getData.rowCount,
+            });
          } else {
             res.status(404).send({ msg: `Data Not Found` });
          }

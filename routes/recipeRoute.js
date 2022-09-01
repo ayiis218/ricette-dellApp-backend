@@ -5,6 +5,7 @@ const { upload } = require('../middlewares/recipeImages');
 // const {uploadV} = require('../middlewares/recipeVideos')
 const { tokenVerify } = require('../middlewares/auth');
 const {
+   listRecipe,
    allRecipe,
    recipeId,
    recipeName,
@@ -17,6 +18,7 @@ const {
    deleteRecipe,
 } = require('../controllers/recipeControllers');
 
+Router.get('/recipes', listRecipe);
 Router.get('/recipe/all', allRecipe);
 Router.get('/recipe/name', recipeName);
 Router.get('/recipe/latest', latestRecipe);

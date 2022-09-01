@@ -4,6 +4,7 @@ const Router = express.Router();
 const { upload } = require('../middlewares/userImages');
 const { tokenVerify } = require('../middlewares/auth');
 const {
+   listUser,
    allUser,
    UserId,
    createUser,
@@ -11,8 +12,8 @@ const {
    deleteUser,
 } = require('../controllers/userControllers');
 
-Router.get('/users', allUser);
-
+Router.get('/users', listUser);
+Router.get('/users/all', allUser);
 Router.post('/users/add', tokenVerify, upload, createUser);
 Router.get('/users/:id', UserId);
 Router.put('/users/update/:id', tokenVerify, upload, updateUser);

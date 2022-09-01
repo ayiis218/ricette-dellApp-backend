@@ -1,9 +1,13 @@
-const fs = require('fs')
+const fs = require('fs');
 
-const deleteFile = (filePath) => {
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath)
-  }
-}
+const deleteFile = (filePath) =>
+   new Promise((resolve, reject) => {
+      if (fs.existsSync(filePath)) {
+         fs.unlink(filePath, (err) => {
+            if (err) reject(new Error('Error delete file'));
+            resolve();
+         });
+      }
+   });
 
-module.exports = deleteFile
+module.exports = deleteFile;

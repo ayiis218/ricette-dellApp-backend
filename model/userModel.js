@@ -1,6 +1,33 @@
 const conn = require('../config/database');
 
 module.exports = {
+   getCountUser: () => {
+      return new Promise((resolve, reject) => {
+         conn.query(`SELECT COUNT(*) AS total FROM users`, (err, res) => {
+            if (err) {
+               reject(new Error(`SQL : ${err.message}`));
+            } else {
+               resolve(res);
+            }
+         });
+      });
+   },
+
+   getListUser: (field, search, sort, type, limit, offset) => {
+      return new Promise((resolve, reject) => {
+         conn.query(
+            `SELECT * FROM users WHERE ${field} ILIKE ('%${search}%') ORDER BY ${sort} ${type} LIMIT $1 OFFSET $2`,
+            [limit, offset],
+            (err, res) => {
+               if (err) {
+                  reject(new Error(`SQL : ${err.message}`));
+               }
+               resolve(res);
+            }
+         );
+      });
+   },
+
    getAllUser: () => {
       return new Promise((resolve, reject) => {
          conn.query('SELECT * FROM users ORDER BY id_users ASC', (err, res) => {
@@ -42,6 +69,7 @@ module.exports = {
          );
       });
    },
+
    getUserByPhone: (phone) => {
       return new Promise((resolve, reject) => {
          conn.query(

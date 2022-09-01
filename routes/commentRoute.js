@@ -3,6 +3,7 @@ const Router = express.Router();
 
 const { tokenVerify } = require('../middlewares/auth');
 const {
+   listComment,
    allComment,
    commentId,
    commentByRecipe,
@@ -11,6 +12,7 @@ const {
    deleteComment,
 } = require('../controllers/commentControllers');
 
+Router.get('/comments', listComment);
 Router.get('/comment', allComment);
 Router.get('/comment/:id', commentId);
 Router.get('/comment/recipe/:id', commentByRecipe);

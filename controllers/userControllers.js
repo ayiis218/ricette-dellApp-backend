@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const {
+   getListUser,
    getAllUser,
+   getCountUser,
    getUserById,
    getUserByEmail,
    getCreateUser,
@@ -9,6 +11,52 @@ const {
 } = require('../model/userModel');
 
 module.exports = {
+   listUser: async (req, res) => {
+      try {
+         const { page, limit } = req?.query;
+         const field = req?.query?.field || 'name';
+         const search = req?.query?.search || '';
+         const sort = req?.query?.sort || 'id_users';
+         const type = req?.query?.type || 'ASC';
+         const pages = Number(page) || 1;
+         const limits = Number(limit) || 5;
+         const offset = (pages - 1) * limit;
+
+         const count = await getCountUser();
+         const amount = Number(count?.rows[0]?.total);
+         const totalPage = Math.ceil(amount / limit);
+
+         const getData = await getListUser(
+            field,
+            search,
+            sort,
+            type,
+            limits,
+            offset
+         );
+         if (getData.rowCount > 0) {
+            const pagination = {
+               pages: pages,
+               limits: limits,
+               offsets: totalPage,
+               amount,
+            };
+            res.status(200).send({
+               msg: `success`,
+               data: getData.rows,
+               pagination,
+            });
+         } else {
+            res.status(400).send({
+               code: 404,
+               msg: `Data Not Found`,
+            });
+         }
+      } catch (err) {
+         res.status(404).send({ msg: err.message });
+      }
+   },
+
    allUser: async (req, res) => {
       try {
          const getData = await getAllUser();
@@ -110,8 +158,8 @@ module.exports = {
                });
                return res.status(200).send({
                   msg: `Success update user id ${id}`,
-                  data: data.rows,
-                  amount: data.rowCount,
+                  data: getData.rows,
+                  amount: getData.rowCount,
                });
             }
          } else {
