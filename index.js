@@ -31,7 +31,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(express.static('picture'));
+app.use(express.static('public'));
 app.use('/picture', express.static('picture'));
 app.use(require('./routes/userRoute'));
 app.use(require('./routes/recipeRoute'));
