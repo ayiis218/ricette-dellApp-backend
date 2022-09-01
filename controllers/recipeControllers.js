@@ -81,14 +81,14 @@ module.exports = {
          if (getData.rowCount > 0) {
             res.status(200).send({
                msg: `success`,
-               data: result.rows,
-               amount: result.rowCount,
+               data: getData.rows,
+               amount: getData.rowCount,
             });
          } else {
             res.status(400).send({
                msg: `Data Not Found`,
-               data: result.rows,
-               amount: result.rowCount,
+               data: getData.rows,
+               amount: getData.rowCount,
             });
          }
       } catch (err) {

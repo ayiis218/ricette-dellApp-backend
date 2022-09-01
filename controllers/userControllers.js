@@ -84,7 +84,11 @@ module.exports = {
                amount: getData.rowCount,
             });
          } else {
-            res.status(404).send({ msg: 'Data not found' });
+            res.status(404).send({
+               msg: 'Data not found',
+               data: getData.rows,
+               amount: getData.rowCount,
+            });
          }
       } catch (error) {
          res.status(400).send({
