@@ -155,7 +155,7 @@ module.exports = {
 
    latestRecipe: async (req, res) => {
       try {
-         const limit = req.query;
+         const { limit } = req.query || 5;
          const getData = await getLatestRecipe(limit);
          res.status(200).send({
             msg: `all new recipe`,
