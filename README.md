@@ -4,6 +4,7 @@
 
 <img src="https://i.postimg.cc/yx8pCmKW/icon.png" align="center" width="250" height="auto" />
   <h1>Ricette dellApp Backend</h1>
+  <a href="https://ricette-dellapp.herokuapp.com/">View Web Service</a>
   <h2>About The Project</h2>
   Is a backend application for creating RESTful APIs for Ricette dellApp applications. This app is developed using Express JS
 </div>
@@ -15,6 +16,19 @@ This app was built with some technologies below:
 - [PostgreSQL](https://www.postgresql.org/)
 - [Bcrypt](https://www.npmjs.com/package/bcrypt)
 - [Multer](https://www.npmjs.com/package/multer)
+
+## Getting Started
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+
+* [Node.js](https://nodejs.org/en/download/)
+
+### Requirements
+* [Node.js](https://nodejs.org/en/)
+* [Postman](https://www.getpostman.com/) for testing
+* [Database]
 
 ## Installation
 - Clone my repositories
