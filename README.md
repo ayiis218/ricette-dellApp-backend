@@ -71,7 +71,7 @@ You can view my Postman collection
 ## Contact
 email : ayiis.218@gmail.com
 </br>
-project Link: git clone https://github.com/ayiis218/ricette-dellApp-backend
+project Link: https://github.com/ayiis218/ricette-dellApp-backend
 </br>
 
 ## License
