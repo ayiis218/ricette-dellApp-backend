@@ -75,9 +75,13 @@ module.exports = {
 
    recipeSearch: async (req, res) => {
       try {
-         let search = req?.params?.name;
-         search = search || '';
-         const getData = await getRecipe(search);
+         const { page, limit } = req?.query;
+         const search = req?.query?.search || '';
+         const pages = Number(page) || 1;
+         const limits = Number(limit) || 5;
+         const offset = (pages - 1) * limit;
+
+         const getData = await getRecipe(search, limits, offset);
          if (getData.rowCount > 0) {
             res.status(200).send({
                msg: `success`,
@@ -150,8 +154,8 @@ module.exports = {
 
    pagination: async (req, res) => {
       try {
-         const { page } = req.query || 1;
-         const { limit } = req.query || 10;
+         const { page } = req?.query || 1;
+         const { limit } = req?.query || 5;
 
          const getData = await getCount(limit, page);
 

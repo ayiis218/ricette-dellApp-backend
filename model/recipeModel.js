@@ -47,12 +47,13 @@ module.exports = {
       });
    },
 
-   getRecipe: (search) => {
+   getRecipe: (search, limit, offset) => {
       return new Promise((resolve, reject) => {
          conn.query(
             `SELECT recipe.id_recipe, recipe.name_recipe, recipe.ingredients, recipe.images, recipe.video, users.id_users, users.name, users.photo, recipe.create_at 
             FROM recipe 
-            INNER JOIN users ON users.id_users = recipe.id_users WHERE name_recipe ILIKE ('%${search}%') ORDER BY create_at ASC`,
+            INNER JOIN users ON users.id_users = recipe.id_users WHERE name_recipe ILIKE ('%${search}%') ORDER BY id_recipe LIMIT $1 OFFSET $2`,
+            [limit, offset],
             (err, res) => {
                if (err) {
                   reject(new Error(`SQL : ${err.message}`));
